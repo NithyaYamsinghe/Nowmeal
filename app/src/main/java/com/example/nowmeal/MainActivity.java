@@ -49,9 +49,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // hooks
         button = findViewById(R.id.button);
-
-
         button.setOnClickListener(v -> {
             Intent intent = new Intent(this, MainClientActivity.class);
             startActivity(intent);
