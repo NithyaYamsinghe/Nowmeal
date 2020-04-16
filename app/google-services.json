@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "181661487052",
+    "firebase_url": "https://nowmeal.firebaseio.com",
+    "project_id": "nowmeal",
+    "storage_bucket": "nowmeal.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:181661487052:android:c16cf2fb6a16a6a9f3d769",
+        "android_client_info": {
+          "package_name": "com.example.nowmeal"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "181661487052-m9306d4umgsb0iatshnpnfmst0g5rjtj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCH-rk5f0_5jw12mR7z5Hs8i4KtAcdlixc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "181661487052-m9306d4umgsb0iatshnpnfmst0g5rjtj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
