@@ -18,7 +18,7 @@
             android:background="@color/colorBackground"
             app:popupTheme="@style/AppTheme.PopupOverlay"
             app:titleTextColor="@color/colorBlack"
-            android:theme="@style/ToolBarColoredBackArrow" />
+            android:theme="@style/ToolBarColoredBackArrow"/>
 
     </com.google.android.material.appbar.AppBarLayout>
 
