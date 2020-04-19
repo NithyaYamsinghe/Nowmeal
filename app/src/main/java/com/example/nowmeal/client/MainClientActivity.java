@@ -195,16 +195,12 @@ public class MainClientActivity extends AppCompatActivity {
         if (requestCode == APP_REQUEST_CODE) {
             IdpResponse response = IdpResponse.fromResultIntent(data);
             if (requestCode == RESULT_OK) {
-
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-
             } else {
                 Toast.makeText(this, "Failed to sign in", Toast.LENGTH_SHORT).show();
-
             }
         }
 
     }
-
 
 }
