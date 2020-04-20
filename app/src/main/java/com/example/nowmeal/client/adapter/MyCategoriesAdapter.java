@@ -12,10 +12,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.nowmeal.R;
+import com.example.nowmeal.client.callback.IRecyclerClickListener;
 import com.example.nowmeal.client.common.Common;
 import com.example.nowmeal.client.model.CategoryModel;
+import com.example.nowmeal.client.eventbus.CategoryClick;
 
-import java.net.CookieHandler;
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.List;
 
 import butterknife.BindView;
@@ -45,6 +48,14 @@ public class MyCategoriesAdapter extends RecyclerView.Adapter<MyCategoriesAdapte
         Glide.with(context).load(categoryModelList.get(position).getImage())
                 .into(holder.category_image);
         holder.category_name.setText(new StringBuilder(categoryModelList.get(position).getName()));
+
+        // event
+        holder.setListener((view, pos) -> {
+
+            Common.categorySelected = categoryModelList.get(pos);
+            EventBus.getDefault().postSticky(new CategoryClick(true, categoryModelList.get(pos)));
+
+        });
     }
 
     @Override
@@ -52,16 +63,29 @@ public class MyCategoriesAdapter extends RecyclerView.Adapter<MyCategoriesAdapte
         return categoryModelList.size();
     }
 
-    public class MyViewHolder  extends RecyclerView.ViewHolder{
+    public class MyViewHolder  extends RecyclerView.ViewHolder implements View.OnClickListener {
         Unbinder unbinder;
 
         @BindView(R.id.img_category)
         ImageView category_image;
         @BindView(R.id.txt_category)
         TextView category_name;
+
+        IRecyclerClickListener listener;
+
+        public void setListener(IRecyclerClickListener listener) {
+            this.listener = listener;
+        }
+
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             unbinder = ButterKnife.bind(this, itemView);
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            listener.onItemClickListener(v, getAdapterPosition());
         }
     }
 
