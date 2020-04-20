@@ -9,7 +9,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".client.MainClientActivity"></activity>
+        <activity android:name=".admin.model.HomeAdminActivity"></activity>
+        <activity android:name=".admin.MainAdminActivity" />
+        <activity android:name=".client.MainClientActivity" />
         <activity
             android:name=".client.HomeActivity"
             android:label="@string/title_activity_home"

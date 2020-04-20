@@ -1,6 +1,7 @@
 package com.example.nowmeal.client.common;
 
 import com.example.nowmeal.client.model.CategoryModel;
+import com.example.nowmeal.client.model.FoodModel;
 import com.example.nowmeal.client.model.UserModel;
 
 public class Common {
@@ -12,4 +13,5 @@ public class Common {
     public static final String CATEGORY_REF = "Category";
     public static UserModel currentUser;
     public static CategoryModel categorySelected;
+    public static FoodModel selectedFood;
 }

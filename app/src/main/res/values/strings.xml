@@ -12,6 +12,7 @@
     <string name="menu_menu">Menu</string>
     <string name="menu_categories">Categories</string>
     <string name="menu_food_list">Food List</string>
+    <string name="menu_food_detail">Food Detail</string>
     <string name="menu_slideshow">Slideshow</string>
     <string name="home_second">Home Second</string>
 

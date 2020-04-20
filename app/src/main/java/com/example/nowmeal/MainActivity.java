@@ -4,15 +4,15 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 
+import com.example.nowmeal.admin.MainAdminActivity;
 import com.example.nowmeal.client.MainClientActivity;
 
 public class MainActivity extends AppCompatActivity {
 
-    Button button;
+    Button buttonClient, buttonAdmin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,9 +24,16 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         // hooks
-        button = findViewById(R.id.button);
-        button.setOnClickListener(v -> {
+        buttonClient = findViewById(R.id.clientButton);
+        buttonAdmin = findViewById(R.id.adminButton);
+        buttonClient.setOnClickListener(v -> {
             Intent intent = new Intent(this, MainClientActivity.class);
+            startActivity(intent);
+
+        });
+
+        buttonAdmin.setOnClickListener(v -> {
+            Intent intent = new Intent(this, MainAdminActivity.class);
             startActivity(intent);
 
         });
