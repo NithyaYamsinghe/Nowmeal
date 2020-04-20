@@ -51,4 +51,5 @@
         android:name="com.example.nowmeal.client.ui.slideshow.SlideshowFragment"
         android:label="@string/menu_slideshow"
         tools:layout="@layout/fragment_slideshow" />
+
 </navigation>

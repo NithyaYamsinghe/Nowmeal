@@ -15,7 +15,6 @@ import android.widget.Toast;
 
 import com.example.nowmeal.R;
 import com.example.nowmeal.admin.common.Common;
-import com.example.nowmeal.admin.model.HomeAdminActivity;
 import com.example.nowmeal.admin.model.ServerUserModel;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.IdpResponse;

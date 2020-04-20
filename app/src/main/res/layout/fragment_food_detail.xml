@@ -37,6 +37,7 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
+
     <com.andremion.counterfab.CounterFab
         android:id="@+id/btnCart"
         android:layout_width="wrap_content"
@@ -92,8 +93,9 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
                         android:padding="12dp"
+                        android:fontFamily="@font/brandon_medium"
                         android:text="Food Name"
-                        android:textColor="@color/colorPrimary"
+                        android:textColor="@color/colorAccent"
                         android:textSize="20sp"
                         android:textStyle="bold" />
 
@@ -113,11 +115,12 @@
 
                         <TextView
                             android:id="@+id/food_price"
+                            android:fontFamily="@font/brandon_medium"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="9"
                             android:text="1,000"
-                            android:textColor="@color/colorPrimary"
+                            android:textColor="@color/colorAccent"
                             android:textSize="18sp"
                             android:textStyle="bold" />
 
@@ -147,9 +150,49 @@
                 app:cardElevation="5dp"
                 app:cardUseCompatPadding="true">
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+                    <RatingBar
+                        android:id="@+id/ratingBar"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        style="?android:attr/ratingBarStyleIndicator"
+                        android:numStars="5"
+                    android:stepSize="0.5"
+                        android:isIndicator="true"/>
+                    
+                    <TextView
+                        android:id="@+id/food_description"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:padding="12dp"
+                        android:lineSpacingMultiplier="1.5"
+                        android:textColor="@color/colorBlack"
+                        android:text="Description"
+                        android:textSize="14dp"
+                        android:fontFamily="@font/brandon_medium"
+                        />
+
+
+                </LinearLayout>
 
 
             </androidx.cardview.widget.CardView>
+            <Button
+                android:id="@+id/btnShowComment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_margin="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:text="Show Comment"
+                android:textColor="@color/colorBackground"
+                app:cornerRadius="4dp"/>
+
 
         </LinearLayout>
 

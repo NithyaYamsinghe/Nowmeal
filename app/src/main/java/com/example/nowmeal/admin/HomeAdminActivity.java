@@ -1,4 +1,4 @@
-package com.example.nowmeal.admin.model;
+package com.example.nowmeal.admin;
 
 import androidx.appcompat.app.AppCompatActivity;
 
