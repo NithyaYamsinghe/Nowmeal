@@ -1,8 +1,5 @@
 package com.example.nowmeal.admin.model;
 
-import com.example.nowmeal.client.model.AddonModel;
-import com.example.nowmeal.client.model.SizeModel;
-
 import java.util.List;
 
 public class FoodModel {

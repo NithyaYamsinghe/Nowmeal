@@ -5,9 +5,9 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.nowmeal.client.callback.ICategoryCallbackListener;
-import com.example.nowmeal.client.common.Common;
-import com.example.nowmeal.client.model.CategoryModel;
+import com.example.nowmeal.admin.common.Common;
+import com.example.nowmeal.admin.callback.ICategoryCallbackListener;
+import com.example.nowmeal.admin.model.CategoryModel;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
