@@ -1,6 +1,6 @@
 package com.example.nowmeal.admin.callback;
 
-import com.example.nowmeal.client.model.CategoryModel;
+import com.example.nowmeal.admin.model.CategoryModel;
 
 import java.util.List;
 

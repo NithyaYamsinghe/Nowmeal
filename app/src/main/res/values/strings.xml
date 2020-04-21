@@ -22,7 +22,7 @@
     <string name="best_deals">Best Deals</string>
 
 
-
+    <!-- Admin drawer -->
     <string name="title_activity_admin_home">AdminHomeActivity</string>
     <string name="admin_navigation_drawer_open">Open navigation drawer</string>
     <string name="admin_navigation_drawer_close">Close navigation drawer</string>
@@ -36,7 +36,24 @@
     <string name="admin_home_second">Home Second</string>
 
 
+    <!-- Shipper drawer -->
+    <string name="shipper_title_activity_home_shipper">HomeShipperActivity</string>
+    <string name="shipper_navigation_drawer_open">Open navigation drawer</string>
+    <string name="shipper_navigation_drawer_close">Close navigation drawer</string>
+    <string name="shipper_nav_header_title">Android Studio</string>
+    <string name="shipper_nav_header_subtitle">android.studio@android.com</string>
+    <string name="shipper_nav_header_desc">Navigation header</string>
+    <string name="shipper_action_settings">Settings</string>
+
+    <string name="shipper_menu_home">Home</string>
+    <string name="shipper_menu_gallery">Gallery</string>
+    <string name="shipper_menu_slideshow">Slideshow</string>
+
+    <string name="shipper_home_second">Home Second</string>
+
+
     <!-- food detail fragment strings -->
     <string name="size">Size</string>
     <string name="add_on">Addon</string>
+
 </resources>

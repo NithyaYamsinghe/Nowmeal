@@ -1,4 +1,4 @@
-package com.example.nowmeal.client.adapter;
+package com.example.nowmeal.admin.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -12,10 +12,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.nowmeal.R;
-import com.example.nowmeal.client.callback.IRecyclerClickListener;
-import com.example.nowmeal.client.common.Common;
-import com.example.nowmeal.client.model.CategoryModel;
-import com.example.nowmeal.client.eventbus.CategoryClick;
+import com.example.nowmeal.admin.callback.IRecyclerClickListener;
+import com.example.nowmeal.admin.common.Common;
+import com.example.nowmeal.admin.eventbus.CategoryClick;
+import com.example.nowmeal.admin.model.CategoryModel;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -37,13 +37,13 @@ public class MyCategoriesAdapter extends RecyclerView.Adapter<MyCategoriesAdapte
 
     @NonNull
     @Override
-    public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new MyViewHolder(LayoutInflater.from(context)
-        .inflate(R.layout.layout_category_item,parent,false));
+    public com.example.nowmeal.admin.adapter.MyCategoriesAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        return new com.example.nowmeal.admin.adapter.MyCategoriesAdapter.MyViewHolder(LayoutInflater.from(context)
+                .inflate(R.layout.layout_category_item,parent,false));
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull com.example.nowmeal.admin.adapter.MyCategoriesAdapter.MyViewHolder holder, int position) {
 
         Glide.with(context).load(categoryModelList.get(position).getImage())
                 .into(holder.category_image);
