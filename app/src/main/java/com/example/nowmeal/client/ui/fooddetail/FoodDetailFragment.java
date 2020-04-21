@@ -29,6 +29,7 @@ import com.example.nowmeal.R;
 import com.example.nowmeal.client.common.Common;
 import com.example.nowmeal.client.model.CommentModel;
 import com.example.nowmeal.client.model.FoodModel;
+import com.example.nowmeal.client.ui.comments.CommentFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -78,6 +79,13 @@ public class FoodDetailFragment extends Fragment {
         showDialogRating();
     }
 
+    @OnClick(R.id.btnShowComment)
+
+    void onShowCommentButtonClick(){
+        CommentFragment commentFragment = CommentFragment.getInstance();
+        commentFragment.show(getActivity().getSupportFragmentManager(), "Comment Fragment");
+
+    }
     private void showDialogRating() {
         androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(getContext());
         builder.setTitle("Rating Food");
