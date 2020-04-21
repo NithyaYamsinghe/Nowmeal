@@ -35,7 +35,7 @@
     <string name="admin_menu_slideshow">Slideshow</string>
     <string name="admin_home_second">Home Second</string>
 
-<<<<<<< HEAD
+
     <!-- Shipper drawer -->
     <string name="shipper_title_activity_home_shipper">HomeShipperActivity</string>
     <string name="shipper_navigation_drawer_open">Open navigation drawer</string>
@@ -50,10 +50,10 @@
     <string name="shipper_menu_slideshow">Slideshow</string>
 
     <string name="shipper_home_second">Home Second</string>
-=======
+
 
     <!-- food detail fragment strings -->
     <string name="size">Size</string>
     <string name="add_on">Addon</string>
->>>>>>> upstream/master
+
 </resources>
