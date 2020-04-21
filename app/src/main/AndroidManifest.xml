@@ -13,6 +13,7 @@
         <activity android:name=".admin.HomeAdminActivity" />
         <activity android:name=".admin.MainAdminActivity" />
         <activity android:name=".client.MainClientActivity" />
+        <activity android:name=".shipper.HomeShipperActivity" />
         <activity
             android:name=".client.HomeActivity"
             android:label="@string/title_activity_home"
