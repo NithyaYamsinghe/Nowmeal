@@ -92,13 +92,15 @@ public class MainShipperActivity extends AppCompatActivity {
                             ShipperUserModel shipperUserModel = dataSnapshot.getValue(ShipperUserModel.class);
                             if (shipperUserModel.getActive()){
                                 goToHomeActivity(shipperUserModel);
-                            }
-//                            goToHomeActivity(shipperUserModel);
-                        } else {
+                            } else {
+                                dialog.dismiss();
+                                Toast.makeText(MainShipperActivity.this, "You must be allowed by Admin to sign in!", Toast.LENGTH_SHORT).show();
 
+                            }
+                        } else {
+                            dialog.dismiss();
                             showRegisterDialog(user);
                         }
-                        dialog.dismiss();
                     }
 
                     @Override

@@ -106,7 +106,7 @@ public class Common {
         Notification notification = builder.build();
         notificationManager.notify(id, notification);
     }
- 
+
     public static void updateToken(Context context, String newToken) {
         FirebaseDatabase.getInstance()
                 .getReference(Common.TOKEN_REF)
