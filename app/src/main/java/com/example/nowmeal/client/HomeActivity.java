@@ -110,6 +110,9 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             case R.id.nav_menu:
                 navController.navigate(R.id.nav_menu);
                 break;
+            case R.id.nav_slideshow:
+                navController.navigate(R.id.nav_slideshow);
+                break;
 
         }
         return true;
