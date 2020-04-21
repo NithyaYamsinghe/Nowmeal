@@ -1,21 +1,28 @@
 package com.example.nowmeal.client.adapter;
 
 import android.content.Context;
-import android.provider.ContactsContract;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.LayoutAnimationController;
+
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+
 import com.example.nowmeal.R;
 import com.example.nowmeal.client.callback.IRecyclerClickListener;
 import com.example.nowmeal.client.common.Common;
+import com.example.nowmeal.client.database.CartDataSource;
+import com.example.nowmeal.client.database.CartDatabase;
+import com.example.nowmeal.client.database.CartItem;
+import com.example.nowmeal.client.database.LocalCartDataSource;
+import com.example.nowmeal.client.eventbus.CounterCartEvent;
 import com.example.nowmeal.client.eventbus.FoodItemClick;
 import com.example.nowmeal.client.model.FoodModel;
 
@@ -27,14 +34,23 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
+
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.schedulers.Schedulers;
+
 public class MyFoodListAdapter extends RecyclerView.Adapter<MyFoodListAdapter.MyViewHolder> {
 
     private Context context;
     private List<FoodModel> foodModelList;
+    private CompositeDisposable  compositeDisposable;
+    private CartDataSource cartDataSource;
 
     public MyFoodListAdapter(Context context, List<FoodModel> foodModelList) {
         this.context = context;
         this.foodModelList = foodModelList;
+        this.compositeDisposable = new CompositeDisposable();
+        this.cartDataSource = new LocalCartDataSource(CartDatabase.getInstance(context).cartDAO());
     }
 
     @NonNull
@@ -58,6 +74,38 @@ public class MyFoodListAdapter extends RecyclerView.Adapter<MyFoodListAdapter.My
             Common.selectedFood = foodModelList.get(pos);
             Common.selectedFood.setKey(String.valueOf(pos));
             EventBus.getDefault().postSticky(new FoodItemClick(true, foodModelList.get(pos)));
+
+        });
+
+        holder.img_quick_cart.setOnClickListener(v -> {
+            CartItem cartItem = new CartItem();
+            cartItem.setUid(Common.currentUser.getUid());
+            cartItem.setUserPhone(Common.currentUser.getPhone());
+
+            cartItem.setFoodId(foodModelList.get(position).getId());
+            cartItem.setFoodName(foodModelList.get(position).getName());
+            cartItem.setFoodImage(foodModelList.get(position).getImage());
+            cartItem.setFoodPrice( Double.valueOf(String.valueOf(foodModelList.get(position).getPrice())) );
+            cartItem.setFoodQuantity(1);
+            cartItem.setFoodExtraPrice(0.0); // default we don't choose size + addon
+            cartItem.setFoodAddon("Default");
+            cartItem.setFoodSize("Default");
+
+
+
+            compositeDisposable.add(cartDataSource.insertOrReplaceAll(cartItem)
+            .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+            .subscribe(()->{
+
+                Toast.makeText(context, "Successfully added to cart", Toast.LENGTH_SHORT).show();
+
+                // send notify to home activity to update the cart
+                EventBus.getDefault().postSticky(new CounterCartEvent(true));
+
+            }, throwable -> {
+                Toast.makeText(context, "[CART ERROR]"+throwable.getMessage(), Toast.LENGTH_SHORT).show();
+            }));
+
 
         });
     }
