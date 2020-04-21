@@ -1,11 +1,12 @@
 package com.example.nowmeal.client.database;
 
 
+import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-import io.reactivex.annotations.NonNull;
+
 
 @Entity(tableName = "Cart")
 public class CartItem {
