@@ -90,7 +90,10 @@ public class MainShipperActivity extends AppCompatActivity {
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         if (dataSnapshot.exists()) {
                             ShipperUserModel shipperUserModel = dataSnapshot.getValue(ShipperUserModel.class);
-                            goToHomeActivity(shipperUserModel);
+                            if (shipperUserModel.getActive()){
+                                goToHomeActivity(shipperUserModel);
+                            }
+//                            goToHomeActivity(shipperUserModel);
                         } else {
 
                             showRegisterDialog(user);
