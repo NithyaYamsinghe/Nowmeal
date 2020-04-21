@@ -11,13 +11,20 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -27,10 +34,16 @@ import com.bumptech.glide.Glide;
 import com.cepheuen.elegantnumberbutton.view.ElegantNumberButton;
 import com.example.nowmeal.R;
 import com.example.nowmeal.client.common.Common;
+import com.example.nowmeal.client.model.AddonModel;
 import com.example.nowmeal.client.model.CommentModel;
 import com.example.nowmeal.client.model.FoodModel;
+import com.example.nowmeal.client.model.SizeModel;
+import com.example.nowmeal.client.ui.comments.CommentFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.android.material.chip.Chip;
+import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -38,6 +51,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -48,11 +62,18 @@ import butterknife.Unbinder;
 import dmax.dialog.SpotsDialog;
 
 
-public class FoodDetailFragment extends Fragment {
+public class FoodDetailFragment extends Fragment implements TextWatcher {
 
     private FoodDetailViewModel foodDetailViewModel;
     private Unbinder unbinder;
     private android.app.AlertDialog waitingDialog;
+    private BottomSheetDialog addonBottomSheetDialog;
+
+
+    // view need inflate
+    ChipGroup chip_group_addon;
+    EditText edt_search;
+
 
     @BindView(R.id.img_food)
     ImageView img_food;
@@ -72,12 +93,68 @@ public class FoodDetailFragment extends Fragment {
     RatingBar ratingBar;
     @BindView(R.id.btnShowComment)
     Button btnShowComment;
+    @BindView(R.id.rdi_group_size)
+    RadioGroup rdi_group_size;
+    @BindView(R.id.img_addon)
+    ImageView img_add_on;
+    @BindView(R.id.chip_group_user_selected_addon)
+    ChipGroup chip_group_user_selected_addon;
+
+
+    @OnClick(R.id.img_addon)
+    void onAddonClick(){
+        if (Common.selectedFood.getAddon() != null){
+            displayAddonList(); // show all add on items
+            addonBottomSheetDialog.show();
+
+
+        }
+    }
+
+    private void displayAddonList() {
+
+        if (Common.selectedFood.getAddon().size() > 0)
+        {
+            chip_group_addon.clearCheck(); // clear check all views
+            chip_group_addon.removeAllViews();
+            edt_search.addTextChangedListener(this);
+
+            // add all views
+            for (AddonModel addonModel:Common.selectedFood.getAddon()){
+
+
+                    Chip chip = (Chip)getLayoutInflater().inflate(R.layout.layout_addon_item, null);
+                    chip.setText(new StringBuilder(addonModel.getName()).append("(+$").append(addonModel.getPrice()).append(")"));
+                    chip.setOnCheckedChangeListener((buttonView, isChecked) -> {
+
+                        if (isChecked)
+                        {
+                            if (Common.selectedFood.getUserSelectedAddon() == null)
+
+                                Common.selectedFood.setUserSelectedAddon(new ArrayList<>());
+                            Common.selectedFood.getUserSelectedAddon().add(addonModel);
+                        }
+
+                    });
+                    chip_group_addon.addView(chip);
+                }
+            }
+
+        }
+
 
     @OnClick(R.id.btn_rating)
     void onRatingButtonClick() {
         showDialogRating();
     }
 
+    @OnClick(R.id.btnShowComment)
+
+    void onShowCommentButtonClick(){
+        CommentFragment commentFragment = CommentFragment.getInstance();
+        commentFragment.show(getActivity().getSupportFragmentManager(), "Comment Fragment");
+
+    }
     private void showDialogRating() {
         androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(getContext());
         builder.setTitle("Rating Food");
@@ -134,8 +211,50 @@ public class FoodDetailFragment extends Fragment {
     private void initViews() {
 
         waitingDialog = new SpotsDialog.Builder().setCancelable(false).setContext(getContext()).build();
+        addonBottomSheetDialog = new BottomSheetDialog(getContext(), R.style.DialogStyle);
+        View layout_addon_display = getLayoutInflater().inflate(R.layout.layout_addon_display, null);
+        chip_group_addon = (ChipGroup)layout_addon_display.findViewById(R.id.chip_group_addon);
+        edt_search = (EditText)layout_addon_display.findViewById(R.id.edt_search);
+        addonBottomSheetDialog.setContentView(layout_addon_display);
+
+        addonBottomSheetDialog.setOnDismissListener(dialog -> {
+
+            displayUserSelectedAddon();
+            calculateTotalPrice();
+
+        });
 
 
+
+    }
+
+    private void displayUserSelectedAddon() {
+
+
+        if (Common.selectedFood.getUserSelectedAddon() != null && Common.selectedFood.getUserSelectedAddon().size() > 0){
+            chip_group_addon.removeAllViews(); // clear all views already added
+            for (AddonModel addonModel: Common.selectedFood.getUserSelectedAddon()) // add all available add on to list
+            {
+                Chip chip = (Chip)getLayoutInflater().inflate(R.layout.chip_with_delete_icon, null);
+                chip.setText(new StringBuilder(addonModel.getName()).append("(+$").append(addonModel.getPrice()).append(")"));
+                chip.setClickable(false);
+                chip.setOnCloseIconClickListener(v -> {
+
+                    // remove when user selected delete
+                    chip_group_user_selected_addon.removeView(v);
+                    Common.selectedFood.getUserSelectedAddon().remove(addonModel);
+                    calculateTotalPrice();
+
+                });
+                chip_group_user_selected_addon.addView(chip);
+
+
+            }
+
+
+        }
+        else if (Common.selectedFood.getUserSelectedAddon().size() == 0)
+            chip_group_user_selected_addon.removeAllViews();
     }
 
     private void submitRatingToFirebase(CommentModel commentModel) {
@@ -241,6 +360,95 @@ public class FoodDetailFragment extends Fragment {
                 .setTitle(Common.selectedFood.getName());
 
 
+        // size
+
+        for (SizeModel sizeModel: Common.selectedFood.getSize()){
+            RadioButton radioButton = new RadioButton(getContext());
+            radioButton.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                if(isChecked)
+                    Common.selectedFood.setUserSelectedSize(sizeModel);
+                   calculateTotalPrice(); // update price
+
+
+            });
+
+
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 1.0f);
+            radioButton.setLayoutParams(params);
+            radioButton.setText(sizeModel.getName());
+            radioButton.setTag(sizeModel.getPrice());
+
+            rdi_group_size.addView(radioButton);
+
+
+        }
+
+        if (rdi_group_size.getChildCount() > 0){
+            RadioButton radioButton = (RadioButton)rdi_group_size.getChildAt(0);
+            radioButton.setChecked(true); // default first select
+
+        }
+        calculateTotalPrice();
+
+
     }
 
+    private void calculateTotalPrice() {
+
+        double totalPrice = Double.parseDouble(Common.selectedFood.getPrice().toString()), displayPrice= 0.0;
+
+        // addon
+        if (Common.selectedFood.getUserSelectedAddon() != null  && Common.selectedFood.getUserSelectedAddon().size() > 0)
+                for (AddonModel addonModel: Common.selectedFood.getUserSelectedAddon())
+                    totalPrice+=Double.parseDouble(addonModel.getPrice().toString());
+
+
+        // size
+        totalPrice += Double.parseDouble(Common.selectedFood.getUserSelectedSize().getPrice().toString());
+
+        displayPrice = totalPrice * (Integer.parseInt(numberButton.getNumber()));
+        displayPrice = Math.round(displayPrice * 100.0 / 100.0);
+
+
+        food_price.setText(new StringBuilder("").append(Common.formatPrice(displayPrice)).toString());
+
+
+    }
+
+    @Override
+    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        // nothing
+    }
+
+    @Override
+    public void onTextChanged(CharSequence s, int start, int before, int count) {
+            chip_group_addon.clearCheck();
+            chip_group_addon.removeAllViews();
+
+            for (AddonModel addonModel:Common.selectedFood.getAddon()){
+                if (addonModel.getName().toLowerCase().contains(s.toString().toLowerCase())){
+
+                    Chip chip = (Chip)getLayoutInflater().inflate(R.layout.layout_addon_item, null);
+                    chip.setText(new StringBuilder(addonModel.getName()).append("(+$").append(addonModel.getPrice()).append(")"));
+                    chip.setOnCheckedChangeListener((buttonView, isChecked) -> {
+
+                        if (isChecked)
+                        {
+                            if (Common.selectedFood.getUserSelectedAddon() == null)
+
+                                Common.selectedFood.setUserSelectedAddon(new ArrayList<>());
+                            Common.selectedFood.getUserSelectedAddon().add(addonModel);
+                        }
+
+                    });
+                        chip_group_addon.addView(chip);
+                }
+            }
+    }
+
+    @Override
+    public void afterTextChanged(Editable s) {
+
+        // nothing
+    }
 }
