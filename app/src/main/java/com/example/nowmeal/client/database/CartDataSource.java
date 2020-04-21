@@ -33,5 +33,7 @@ public interface CartDataSource {
 
     Single<Integer> cleanCart(String uid);
 
+    Single<CartItem> getItemWithAllOptionsInCart(String uid, String foodId, String foodSize, String foodAddon);
+
 
 }
