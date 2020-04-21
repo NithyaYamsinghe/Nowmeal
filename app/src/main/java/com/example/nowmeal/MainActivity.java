@@ -9,10 +9,11 @@ import android.widget.Button;
 
 import com.example.nowmeal.admin.MainAdminActivity;
 import com.example.nowmeal.client.MainClientActivity;
+import com.example.nowmeal.shipper.MainShipperActivity;
 
 public class MainActivity extends AppCompatActivity {
 
-    Button buttonClient, buttonAdmin;
+    Button buttonClient, buttonAdmin, buttonShipper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
         // hooks
         buttonClient = findViewById(R.id.clientButton);
         buttonAdmin = findViewById(R.id.adminButton);
+        buttonShipper = findViewById(R.id.shipperButton);
         buttonClient.setOnClickListener(v -> {
             Intent intent = new Intent(this, MainClientActivity.class);
             startActivity(intent);
@@ -34,6 +36,12 @@ public class MainActivity extends AppCompatActivity {
 
         buttonAdmin.setOnClickListener(v -> {
             Intent intent = new Intent(this, MainAdminActivity.class);
+            startActivity(intent);
+
+        });
+
+        buttonShipper.setOnClickListener(v -> {
+            Intent intent = new Intent(this, MainShipperActivity.class);
             startActivity(intent);
 
         });
