@@ -1,16 +1,17 @@
 package com.example.nowmeal.shipper.model;
 
-public class ServerUserModel {
+public class ShipperUserModel {
 
-    private String uid, name, phone;
-    private boolean active;
+    private String uid, name, address, phone;
+    boolean active;
 
-    public ServerUserModel() {
+    public ShipperUserModel() {
     }
 
-    public ServerUserModel(String uid, String name, String phone, boolean active) {
+    public ShipperUserModel(String uid, String name, String address, String phone, boolean active) {
         this.uid = uid;
         this.name = name;
+        this.address = address;
         this.phone = phone;
         this.active = active;
     }
@@ -31,6 +32,14 @@ public class ServerUserModel {
         this.name = name;
     }
 
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
     public String getPhone() {
         return phone;
     }
@@ -39,11 +48,11 @@ public class ServerUserModel {
         this.phone = phone;
     }
 
-    public boolean isActive() {
-        return active;
+    public  void setActive(boolean active) {
+        this.active = active;
     }
 
-    public void setActive(boolean active) {
-        this.active = active;
+    public boolean getActive() {
+        return active;
     }
 }
