@@ -1,4 +1,4 @@
-package com.example.nowmeal.client;
+package com.example.nowmeal.shipper;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -14,8 +14,9 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.nowmeal.R;
-import com.example.nowmeal.client.common.Common;
-import com.example.nowmeal.client.model.UserModel;
+import com.example.nowmeal.shipper.HomeShipperActivity;
+import com.example.nowmeal.shipper.common.Common;
+import com.example.nowmeal.shipper.model.ServerUserModel;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.IdpResponse;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -34,13 +35,13 @@ import java.util.List;
 
 import dmax.dialog.SpotsDialog;
 
-public class MainClientActivity extends AppCompatActivity {
+public class MainShipperActivity extends AppCompatActivity {
 
-    public static int APP_REQUEST_CODE = 7171; // any number
+    private static int APP_REQUEST_CODE = 7171;
     private FirebaseAuth firebaseAuth;
     private FirebaseAuth.AuthStateListener listener;
     private AlertDialog dialog;
-    private DatabaseReference userRef;
+    private DatabaseReference serverRef;
     private List<AuthUI.IdpConfig> providers;
 
 
@@ -50,6 +51,7 @@ public class MainClientActivity extends AppCompatActivity {
         firebaseAuth.addAuthStateListener(listener);
     }
 
+
     @Override
     protected void onStop() {
         if (listener != null)
@@ -57,118 +59,119 @@ public class MainClientActivity extends AppCompatActivity {
         super.onStop();
     }
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main_client);
+        setContentView(R.layout.activity_main_shipper);
         init();
-    }
 
+
+    }
 
     private void init() {
         providers = Arrays.asList(new AuthUI.IdpConfig.PhoneBuilder().build());
-        userRef = FirebaseDatabase.getInstance().getReference(Common.USER_REFERENCES);
+        serverRef = FirebaseDatabase.getInstance().getReference(Common.SERVER_REF);
         firebaseAuth = FirebaseAuth.getInstance();
         dialog = new SpotsDialog.Builder().setContext(this).setCancelable(false).build();
         listener = firebaseAuthLocal -> {
 
             FirebaseUser user = firebaseAuthLocal.getCurrentUser();
-            if (user != null) {
+            if(user != null){
 
                 // check user from  firebase
-                checkUserFromFirebase(user);
+                checkServerUserFromFirebase(user);
 
-            } else {
+            }
+            else{
                 phoneLogin();
             }
 
         };
     }
 
-    private void checkUserFromFirebase(FirebaseUser user) {
+    private void checkServerUserFromFirebase(FirebaseUser user) {
 
         dialog.show();
-        userRef.child(user.getUid())
+        serverRef.child(user.getUid())
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        if (dataSnapshot.exists()) {
-                            UserModel userModel = dataSnapshot.getValue(UserModel.class);
-                            goToHomeActivity(userModel);
-                        } else {
 
-                            showRegisterDialog(user);
+                        if(dataSnapshot.exists()){
+                            ServerUserModel userModel = dataSnapshot.getValue(ServerUserModel.class);
+                            if (userModel.isActive()){
+                                goToHomeActivity(userModel);
+                            }
+                            else{
+
+                                dialog.dismiss();
+                                Toast.makeText(MainShipperActivity.this, "You must be allowed from admin to access this app", Toast.LENGTH_SHORT).show();
+                            }
+
                         }
-                        dialog.dismiss();
+
+                        else{
+                            // user not exist in database
+                            dialog.dismiss();
+                            showRegisterDialog(user);
+
+                        }
                     }
 
                     @Override
                     public void onCancelled(@NonNull DatabaseError databaseError) {
 
-
                         dialog.dismiss();
-                        Toast.makeText(MainClientActivity.this, "" + databaseError.getMessage(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MainShipperActivity.this, ""+databaseError.getMessage(), Toast.LENGTH_SHORT).show();
+
                     }
                 });
 
-
     }
-
-    private void goToHomeActivity(UserModel userModel) {
-        Common.currentUser = userModel;
-        startActivity(new Intent(this, HomeActivity.class));
-        finish();
-
-    }
-
 
     private void showRegisterDialog(FirebaseUser user) {
 
         androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
         builder.setTitle("Register");
-        builder.setMessage("Please fill this information");
-
+        builder.setMessage("Please fill information \n Admin will accept your account later");
         View itemView = LayoutInflater.from(this).inflate(R.layout.layout_register, null);
-        EditText edt_name = (EditText) itemView.findViewById(R.id.edt_name);
-        EditText edt_address = (EditText) itemView.findViewById(R.id.edt_address);
-        EditText edt_phone = (EditText) itemView.findViewById(R.id.edt_phone);
-
+        EditText edt_name = (EditText)itemView.findViewById(R.id.edt_name);
+        EditText edt_phone = (EditText)itemView.findViewById(R.id.edt_phone);
 
         // set data
         edt_phone.setText(user.getPhoneNumber());
         builder.setNegativeButton("CANCEL", (dialog, which) -> dialog.dismiss())
                 .setPositiveButton("REGISTER", (dialogInterface, which) -> {
-                    if (TextUtils.isEmpty(edt_name.getText().toString())) {
-                        Toast.makeText(this, "Please enter your name", Toast.LENGTH_SHORT).show();
-                        return;
-                    } else if (TextUtils.isEmpty(edt_address.getText().toString())) {
-                        Toast.makeText(this, "Please enter your address", Toast.LENGTH_SHORT).show();
+                    if (TextUtils.isEmpty(edt_name.getText().toString())){
+                        Toast.makeText(MainShipperActivity.this, "Please enter your name", Toast.LENGTH_SHORT).show();
                         return;
                     }
 
-                    UserModel userModel = new UserModel();
-                    userModel.setUid(user.getUid());
-                    userModel.setName(edt_name.getText().toString());
-                    userModel.setAddress(edt_address.getText().toString());
-                    userModel.setPhone(edt_phone.getText().toString());
-                    userRef.child(userModel.getUid())
-                            .setValue(userModel)
+                    ServerUserModel serverUserModel = new ServerUserModel();
+                    serverUserModel.setUid(user.getUid());
+                    serverUserModel.setName(edt_name.getText().toString());
+                    serverUserModel.setPhone(edt_phone.getText().toString());
+                    serverUserModel.setActive(false); // default, must active user by manually
+
+                    dialog.show();
+
+
+                    serverRef.child(serverUserModel.getUid())
+                            .setValue(serverUserModel)
                             .addOnFailureListener(new OnFailureListener() {
                                 @Override
                                 public void onFailure(@NonNull Exception e) {
                                     dialog.dismiss();
-                                    Toast.makeText(MainClientActivity.this, "" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(MainShipperActivity.this, ""+ e.getMessage(), Toast.LENGTH_SHORT).show();
                                 }
-                            })
-                            .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                @Override
-                                public void onComplete(@NonNull Task<Void> task) {
-                                    dialog.dismiss();
-                                    Toast.makeText(MainClientActivity.this, "Congratulations!, registered successfully", Toast.LENGTH_SHORT).show();
-                                    goToHomeActivity(userModel);
-                                }
-                            });
+                            }).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            dialog.dismiss();
+                            Toast.makeText(MainShipperActivity.this, "Congratulations!, registerd successfully, admin will activate your account soon", Toast.LENGTH_SHORT).show();
+                            //goToHomeActivity(serverUserModel);
+                        }
+                    });
                 });
 
         builder.setView(itemView);
@@ -176,30 +179,39 @@ public class MainClientActivity extends AppCompatActivity {
         androidx.appcompat.app.AlertDialog registerDialog = builder.create();
         registerDialog.show();
 
+    }
+
+    private void goToHomeActivity(ServerUserModel serverUserModel) {
+        dialog.dismiss();
+        Common.currentServerUser = serverUserModel;
+        startActivity(new Intent(this, HomeShipperActivity.class));
+        finish();
 
     }
 
     private void phoneLogin() {
+
         startActivityForResult(AuthUI.getInstance()
                 .createSignInIntentBuilder()
                 .setAvailableProviders(providers)
                 .build(), APP_REQUEST_CODE
         );
-
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == APP_REQUEST_CODE) {
-            IdpResponse response = IdpResponse.fromResultIntent(data);
-            if (requestCode == RESULT_OK) {
+        if(requestCode == APP_REQUEST_CODE){
+            IdpResponse response =  IdpResponse.fromResultIntent(data);
+            if(requestCode == RESULT_OK){
+
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-            } else {
+
+            }
+            else{
                 Toast.makeText(this, "Failed to sign in", Toast.LENGTH_SHORT).show();
+
             }
         }
-
     }
-
 }
