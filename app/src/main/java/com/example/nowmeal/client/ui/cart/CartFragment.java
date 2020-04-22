@@ -1,5 +1,6 @@
 package com.example.nowmeal.client.ui.cart;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.view.LayoutInflater;
@@ -21,6 +22,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.nowmeal.R;
 import com.example.nowmeal.client.adapter.MyCartAdapter;
 import com.example.nowmeal.client.common.Common;
+import com.example.nowmeal.client.common.MySwipeHelper;
 import com.example.nowmeal.client.database.CartDataSource;
 import com.example.nowmeal.client.database.CartDatabase;
 import com.example.nowmeal.client.database.CartItem;
@@ -107,6 +109,19 @@ public class CartFragment extends Fragment {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         recycler_cart.setLayoutManager(layoutManager);
         recycler_cart.addItemDecoration(new DividerItemDecoration(getContext(), layoutManager.getOrientation()));
+
+        MySwipeHelper mySwipeHelper = new MySwipeHelper(getContext(), recycler_cart, 200) {
+            @Override
+            public void instantiateMyButton(RecyclerView.ViewHolder viewHolder, List<MyButton> buf) {
+
+                buf.add(new MyButton(getContext(), "Delete", 30, 0, Color.parseColor("#03DAC5"),
+                        pos -> {
+                            Toast.makeText(getContext(), "Delete item clicked!", Toast.LENGTH_SHORT).show();
+
+
+                        }));
+            }
+        };
     }
 
 
