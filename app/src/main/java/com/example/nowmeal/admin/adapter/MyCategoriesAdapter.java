@@ -37,7 +37,7 @@ public class MyCategoriesAdapter extends RecyclerView.Adapter<MyCategoriesAdapte
 
     @NonNull
     @Override
-    public com.example.nowmeal.admin.adapter.MyCategoriesAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public MyCategoriesAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         return new com.example.nowmeal.admin.adapter.MyCategoriesAdapter.MyViewHolder(LayoutInflater.from(context)
                 .inflate(R.layout.layout_category_item,parent,false));
     }

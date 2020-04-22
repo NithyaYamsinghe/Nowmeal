@@ -8,10 +8,10 @@
             android:id="@+id/admin_nav_category"
             android:icon="@drawable/ic_restaurant_menu_black_24dp"
             android:title="@string/admin_menu_category" />
-        <item
-            android:id="@+id/admin_nav_gallery"
-            android:icon="@drawable/ic_menu_gallery"
-            android:title="@string/admin_menu_gallery" />
+<!--        <item-->
+<!--            android:id="@+id/admin_nav_gallery"-->
+<!--            android:icon="@drawable/ic_menu_gallery"-->
+<!--            android:title="@string/admin_menu_gallery" />-->
         <item
             android:id="@+id/admin_nav_slideshow"
             android:icon="@drawable/ic_menu_slideshow"

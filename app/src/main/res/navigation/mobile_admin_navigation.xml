@@ -30,10 +30,10 @@
     </fragment>
 
     <fragment
-        android:id="@+id/admin_nav_gallery"
-        android:name="com.example.nowmeal.admin.ui.gallery.GalleryFragment"
-        android:label="@string/admin_menu_gallery"
-        tools:layout="@layout/fragment_admin_gallery" />
+        android:id="@+id/admin_nav_food_list"
+        android:name="com.example.nowmeal.admin.ui.food_list.FoodListFragment"
+        android:label="@string/admin_menu_food_list"
+        tools:layout="@layout/fragment_admin_food_list" />
 
     <fragment
         android:id="@+id/admin_nav_slideshow"
