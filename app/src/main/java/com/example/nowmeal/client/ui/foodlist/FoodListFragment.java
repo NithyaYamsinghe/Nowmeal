@@ -7,7 +7,6 @@ import androidx.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -17,13 +16,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
-import android.widget.TextView;
 
 import com.example.nowmeal.R;
 import com.example.nowmeal.client.adapter.MyFoodListAdapter;
 import com.example.nowmeal.client.common.Common;
 import com.example.nowmeal.client.model.FoodModel;
-import com.example.nowmeal.client.ui.slideshow.SlideshowViewModel;
 
 import java.util.List;
 

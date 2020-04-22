@@ -15,6 +15,7 @@ import com.example.nowmeal.client.database.LocalCartDataSource;
 import com.example.nowmeal.client.eventbus.CategoryClick;
 import com.example.nowmeal.client.eventbus.CounterCartEvent;
 import com.example.nowmeal.client.eventbus.FoodItemClick;
+import com.example.nowmeal.client.eventbus.HideFABCart;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
@@ -71,8 +72,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                navController.navigate(R.id.nav_cart);
             }
         });
 //        DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -81,7 +81,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home, R.id.nav_menu , R.id.nav_food_list, R.id.nav_food_detail, R.id.nav_slideshow )
+                R.id.nav_home, R.id.nav_menu , R.id.nav_food_list, R.id.nav_food_detail, R.id.nav_cart)
                 .setDrawerLayout(drawer)
                 .build();
 //        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
@@ -141,8 +141,8 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             case R.id.nav_menu:
                 navController.navigate(R.id.nav_menu);
                 break;
-            case R.id.nav_slideshow:
-                navController.navigate(R.id.nav_slideshow);
+            case R.id.nav_cart:
+                navController.navigate(R.id.nav_cart);
                 break;
 
         }
@@ -168,6 +168,18 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
+
+
+    @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
+    public void onHideFABEvent(HideFABCart event){
+        if (event.isHidden()){
+
+            fab.hide();
+
+        }
+        else
+            fab.show();
+    }
 
     @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
     public void onCartCounter(CounterCartEvent event){
